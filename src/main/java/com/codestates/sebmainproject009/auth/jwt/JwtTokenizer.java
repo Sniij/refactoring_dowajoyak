@@ -131,6 +131,9 @@ public class JwtTokenizer {
     }
 
     public Long extractUserIdFromToken(String requestToken){
+
+        requestToken = extractTokenFromHeader(requestToken);
+
         if(requestToken!=null) {
             Jws<Claims> claims =
                     getClaims(requestToken, encodeBase64SecretKey(secretKey));

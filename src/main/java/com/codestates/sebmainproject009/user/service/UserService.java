@@ -1,6 +1,11 @@
 package com.codestates.sebmainproject009.user.service;
 
+import com.codestates.sebmainproject009.auth.jwt.JwtTokenizer;
 import com.codestates.sebmainproject009.auth.utils.CustomAuthorityUtils;
+import com.codestates.sebmainproject009.comment.entity.Comment;
+import com.codestates.sebmainproject009.comment.repository.CommentRepository;
+import com.codestates.sebmainproject009.commu.entity.Commu;
+import com.codestates.sebmainproject009.commu.repository.CommuRepository;
 import com.codestates.sebmainproject009.exception.BusinessLogicException;
 import com.codestates.sebmainproject009.exception.ExceptionCode;
 import com.codestates.sebmainproject009.user.entity.User;
@@ -22,13 +27,23 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+
+    private final JwtTokenizer jwtTokenizer;
+
+    private final CommuRepository commuRepository;
+    private final CommentRepository commentRepository;
+
+
     @Value("${profileDefaultImgUrl}")
     private String defaultProfileImgUrl;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer, CommuRepository commuRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
+        this.jwtTokenizer = jwtTokenizer;
+        this.commuRepository = commuRepository;
+        this.commentRepository = commentRepository;
     }
 
     public User createUser(User user){
@@ -63,6 +78,7 @@ public class UserService {
 
         return findVerifiedUser(userId);
     }
+
     public User findUser(String email){
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
@@ -70,7 +86,21 @@ public class UserService {
     }
 
     public void deleteUser(long userId){
+
         User findUser = findVerifiedUser(userId);
+
+        List<Commu> findCommu = commuRepository.findCommuListByUserId(findUser.getUserId());
+
+        for(Commu commu : findCommu){
+            List<Comment> commentList = commu.getComments();
+
+            for(Comment comment : commentList){
+                commentRepository.delete(comment);
+            }
+
+            commuRepository.deleteById(commu.getCommuId());
+        }
+
         userRepository.delete(findUser);
     }
 
@@ -93,5 +123,12 @@ public class UserService {
 
         return optionalUser.isPresent();
     }
+
+    public User findUserByToken(String token) {
+        Long userId = jwtTokenizer.extractUserIdFromToken(token);
+
+        return findUser(userId);
+    }
+
 
 }

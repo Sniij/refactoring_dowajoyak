@@ -1,35 +1,13 @@
-cloud:
-  aws:
-    s3:
-      bucket: dowajoyak.store
-    region:
-      auto: false
-      static: ap-northeast-2
-    stack:
-      auto: false
-    credentials:
-      use-default-aws-credentials-chain: true
-
-aws:
-  paramstore:
-    enabled: true
-    prefix: /spring-boot-aws
-    defaultContext: db-pre-project-005
-    profileSeparator: _
-
-
 spring:
   config:
-    import: "aws-parameterstore:"
-    active:
-      on-profile: default
+    import: 'aws-parameterstore:'
   servlet:
     multipart:
       max-file-size: 10MB
   datasource:
-    url: jdbc:mysql://db-instance-dowajoyak.cdg7kqqky4s0.ap-northeast-2.rds.amazonaws.com:13306/dowajoyak?createDatabaseIfNotExist=true&createTableIfNotExist=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
-    username: admin
-    password: 12345678
+    url:
+    username:
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -84,6 +62,24 @@ spring:
             user-name-attribute: id
         pathmatch:
             matching-strategy: ant_path_matcher
+cloud:
+  aws:
+    s3:
+      bucket: dowajoyak.store
+    region:
+      auto: false
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      use-default-aws-credentials-chain: true
+
+aws:
+  paramstore:
+    enabled: true
+    prefix: /spring-boot-aws
+    defaultContext: db-pre-project-005
+    profileSeparator: _
 
 logging:
   level:

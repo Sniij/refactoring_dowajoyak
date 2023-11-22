@@ -23,7 +23,7 @@ configurations {
 }
 
 ext {
-	set('springCloudVersion', "2021.0.8")
+	set('springCloudVersion', "2021.0.7")
 }
 
 dependencyManagement {
@@ -48,7 +48,8 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	runtimeOnly 'mysql:mysql-connector-java:8.0.28'
+	implementation 'mysql:mysql-connector-java:8.0.32'
+	runtimeOnly 'mysql:mysql-connector-java'
 
 	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'

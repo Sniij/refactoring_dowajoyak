@@ -2,10 +2,13 @@ package com.codestates.sebmainproject009.commu.service;
 
 import com.codestates.sebmainproject009.comment.entity.Comment;
 import com.codestates.sebmainproject009.comment.repository.CommentRepository;
+import com.codestates.sebmainproject009.commu.dto.CommuPatchDto;
 import com.codestates.sebmainproject009.commu.dto.CommuPostDto;
 import com.codestates.sebmainproject009.commu.entity.Commu;
 import com.codestates.sebmainproject009.commu.mapper.CommuMapper;
 import com.codestates.sebmainproject009.commu.repository.CommuRepository;
+import com.codestates.sebmainproject009.exception.BusinessLogicException;
+import com.codestates.sebmainproject009.exception.ExceptionCode;
 import com.codestates.sebmainproject009.user.entity.User;
 import com.codestates.sebmainproject009.user.service.UserService;
 import lombok.Getter;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -38,24 +42,44 @@ public class CommuService {
 
 
     public Commu createCommu(CommuPostDto commuPostDto){
+
         User user = userService.findVerifiedUser(commuPostDto.getUserId());
         Commu commu = mapper.commuPostDtoToCommu(commuPostDto);
+        commu.setUser(user);
 
-        Commu cratedCommu = commu;
-        cratedCommu.setUser(user);
-
-        return commuRepository.save(cratedCommu);
+        return commuRepository.save(commu);
     }
 
-    public Commu updateCommu(Commu commu){
-        Commu findCommu = findVerifiedCommu(commu.getCommuId());
+    public Commu updateCommu(CommuPatchDto dto, String token){
 
-        Optional.ofNullable(commu.getTitle())
+        Commu findCommu = getCommu(dto.getCommuId(), token);
+
+
+        Optional.ofNullable(dto.getTitle())
                 .ifPresent(title -> findCommu.setTitle(title));
-        Optional.ofNullable(commu.getContent())
+        Optional.ofNullable(dto.getContent())
                 .ifPresent(content -> findCommu.setContent(content));
 
+
         return commuRepository.save(findCommu);
+    }
+
+    private Commu getCommu(Long commuId, String token) {
+        User user;
+        user = userService.findUserByToken(token);
+
+        if(user == null){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+
+
+        Commu findCommu = findVerifiedCommu(commuId);
+
+        if(!Objects.equals(user.getUserId(), findCommu.getUser().getUserId())){
+            throw new BusinessLogicException(ExceptionCode.FORBIDDEN);
+        }
+
+        return findCommu;
     }
 
     public Commu findCommu(long commuId){
@@ -73,9 +97,12 @@ public class CommuService {
         return commuRepository.findAll();
     }
 
-    public void deleteCommu(long commuId){
-        Commu foundCommu = findVerifiedCommu(commuId);
-        List<Comment> commentList = foundCommu.getComments();
+
+    public void deleteCommu(long commuId, String token){
+
+        Commu findCommu = getCommu(commuId, token);
+
+        List<Comment> commentList = findCommu.getComments();
         for(Comment comment : commentList){
             commentRepository.delete(comment);
         }
@@ -87,13 +114,6 @@ public class CommuService {
         Optional<Commu>optionalCommu = commuRepository.findById(commuId);
 
         return optionalCommu.orElseThrow(()-> new NoSuchMessageException("게시글이 없습니다."));
-    }
-
-
-    public boolean isSameWriter(Long userId, long commuId) {
-        Commu foundCommu = findVerifiedCommu(commuId);
-        Long writerId = foundCommu.getUser().getUserId();
-        return writerId.equals(userId);
     }
 
 

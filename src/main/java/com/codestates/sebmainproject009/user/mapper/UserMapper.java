@@ -11,5 +11,31 @@ import org.mapstruct.Mapper;
 public interface UserMapper {
     User userPostDtoToUser(UserPostDto userPostDto);
     User userPatchDtoToUser(UserPatchDto userPatchDto);
-    UserResponseDto userToUserResponseDto(User user);
+    default UserResponseDto userToUserResponseDto(User user){
+
+        if ( user == null ) {
+            return null;
+        }
+
+        UserResponseDto userResponseDto = new UserResponseDto();
+
+        if ( user.getUserId() != null ) {
+            userResponseDto.setUserId( user.getUserId() );
+        }
+        userResponseDto.setEmail( user.getEmail() );
+        userResponseDto.setDisplayName( user.getDisplayName() );
+
+        if ( user.getAllergy() != null ) {
+
+            userResponseDto.setAllergy( user.getAllergy().name() );
+
+            if(user.getAllergy().toString().equals("OTHER")) {
+                userResponseDto.setAllergy( user.getOtherAllergy() );
+            }
+        }
+
+        userResponseDto.setProfileImgUrl( user.getProfileImgUrl() );
+
+        return userResponseDto;
+    }
 }

@@ -10,6 +10,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 public class UserPatchDto {
 
+    @NotBlank(message = "User 식별자를 적어주세요.")
     private long userId;
 
     @NotBlank(message = "이름을 적어주세요.")
