@@ -1,6 +1,7 @@
 package com.codestates.sebmainproject009.auth.jwt;
 
 
+import com.codestates.sebmainproject009.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -16,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -207,5 +209,26 @@ public class JwtTokenizer {
             return null;
         }
 
+    }
+
+
+
+    public String refreshAccessToken(String authorization, User user){
+
+        verifyTokenExpiration(authorization);
+
+        Map<String , Object> claims = new HashMap<>();
+        claims.put("username", user.getEmail());
+        claims.put("roles", user.getRoles());
+        claims.put("userId",user.getUserId());
+
+        String subject = user.getEmail();
+        Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());
+
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+        String accessToken = generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+
+        return "Bearer ".concat(accessToken);
     }
 }
