@@ -70,6 +70,7 @@ public class UserService {
         Optional.ofNullable(user.getDisplayName())
                 .ifPresent(name -> findUser.setDisplayName(name));
 
+
         return userRepository.save(findUser);
     }
 

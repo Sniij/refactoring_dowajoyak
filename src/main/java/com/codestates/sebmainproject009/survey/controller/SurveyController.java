@@ -1,39 +1,34 @@
 package com.codestates.sebmainproject009.survey.controller;
 
+import com.codestates.sebmainproject009.response.SingleResponseDto;
 import com.codestates.sebmainproject009.survey.Dto.SurveyDto;
+import com.codestates.sebmainproject009.survey.service.SurveyService;
 import com.codestates.sebmainproject009.user.entity.User;
-import com.codestates.sebmainproject009.user.repository.UserRepository;
-import com.codestates.sebmainproject009.user.service.UserService;
+import com.codestates.sebmainproject009.user.mapper.UserMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Arrays;
 
 @RestController
 @RequestMapping("/surveys")
 public class SurveyController {
 
-    private final UserRepository userRepository;
-    private final UserService userService;
 
-    public SurveyController(UserRepository userRepository, UserService userService){
-        this.userRepository = userRepository;
-        this.userService = userService;
+    private final SurveyService surveyService;
+
+    private final UserMapper mapper;
+
+    public SurveyController(SurveyService surveyService, UserMapper mapper){
+        this.surveyService = surveyService;
+        this.mapper = mapper;
     }
     @PostMapping
-    public void postSurvey(@RequestBody SurveyDto surveyDto){
-        User user = userService.findVerifiedUser(surveyDto.getUserId());
-        user.setWorriedOrgan(User.WorriedOrgan.valueOf(surveyDto.getDisease()));
+    public ResponseEntity postSurvey(@RequestBody SurveyDto surveyDto,
+                                     @RequestHeader("Authorization") String authorizationHeader){
 
-        String inputAllergy = surveyDto.getAllergy();
+        User updateUser = surveyService.setUserAllergy(surveyDto, authorizationHeader);
 
-        if(Arrays.stream(User.Allergy.values()).anyMatch(i->i.toString().equals(inputAllergy))){
-            user.setAllergy(User.Allergy.valueOf(surveyDto.getAllergy()));
-            user.setOtherAllergy(null);
-        }else {
-            user.setAllergy(User.Allergy.OTHER);
-            user.setOtherAllergy(inputAllergy);
-        }
-
-        userRepository.save(user);
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.userToUserResponseDto(updateUser)), HttpStatus.OK);
     }
+
 }
