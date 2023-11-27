@@ -69,8 +69,7 @@ public class CommuController {
 
 
     @PatchMapping("/{commuId}")
-    public ResponseEntity patchCommu(@PathVariable long commuId,
-                                     @RequestBody CommuPatchDto commuPatchDto,
+    public ResponseEntity patchCommu(@RequestBody CommuPatchDto commuPatchDto,
                                      @RequestHeader("Authorization") String authorizationHeader){
 
         Commu updatedCommu = commuService.updateCommu(commuPatchDto, authorizationHeader);

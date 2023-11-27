@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class CommentPostDto {
-    private Long userId;
     private Long commuId;
     @NotBlank
     private String comment;

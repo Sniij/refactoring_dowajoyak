@@ -36,10 +36,10 @@ public class CommentService {
     }
 
 
-    public Comment createComment(CommentPostDto commentPostDto){
+    public Comment createComment(CommentPostDto commentPostDto, String authorizationHeader){
 
         Commu findCommu = commuService.findVerifiedCommu(commentPostDto.getCommuId());
-        User findUser = userService.findVerifiedUser(commentPostDto.getUserId());
+        User findUser = userService.findUserByToken(authorizationHeader);
         Comment comment = mapper.commentPostDtoToComment(commentPostDto);
         comment.setUser(findUser);
         comment.setDisplayName(findUser.getDisplayName());

@@ -3,6 +3,8 @@ package com.codestates.sebmainproject009.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
+
+    BAD_REQUEST(400, "Bad Request"),
     INVALID_TOKEN(401, "Invalid Token"),
     UNAUTHORIZED(401,"Unauthorized"),
     FORBIDDEN(403, "Forbidden"),
