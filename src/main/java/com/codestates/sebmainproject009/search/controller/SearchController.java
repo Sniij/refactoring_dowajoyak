@@ -46,6 +46,7 @@ public class SearchController {
         this.APIServiceImpl = APIServiceImpl;
     }
 
+
     @GetMapping
     public ResponseEntity getSearchList(@NotNull @RequestParam String itemName,
                                         @Nullable @RequestHeader("Authorization") String authorizationHeader){
