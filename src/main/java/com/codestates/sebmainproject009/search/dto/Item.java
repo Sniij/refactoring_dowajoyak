@@ -1,4 +1,4 @@
-package com.codestates.sebmainproject009.search.entity;
+package com.codestates.sebmainproject009.search.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -131,6 +131,7 @@ public class Item {
 
 
     }
+
     public String removeTag(String data){
         return data.replaceAll("<br />","")
                 .replaceAll("<p>","")
@@ -139,10 +140,12 @@ public class Item {
                 .replaceAll("<sup>","")
                 .replaceAll("</sup>","")
                 .replaceAll("<sub>","")
-                .replaceAll("</sub>","")
-;
+                .replaceAll("</sub>","");
 
     }
+
+
+
 
 }
 

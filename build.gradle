@@ -23,6 +23,7 @@ configurations {
 }
 
 ext {
+	// springCloudVersion setting
 	set('springCloudVersion', "2021.0.7")
 }
 
@@ -35,26 +36,30 @@ dependencyManagement {
 dependencies {
 
 	// AWS paramStore 사용 Spring boot 버전 호환 상세 : https://spring.io/projects/spring-cloud
-
 	implementation "org.springframework.cloud:spring-cloud-starter-aws-parameter-store-config:2.2.6.RELEASE"
 	implementation "io.awspring.cloud:spring-cloud-starter-aws-parameter-store-config:2.3.0"
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
-
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// Spring Web 기본, test, data JPA 를 사용하기 위한 dependency
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// DTO validation 검증을 위한 애너테이션 사용을 위한 dependency
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// Entity, Dto 관련 작업 ( getter, setter, toString 등 ), Entity<->Dto 매퍼를 편리하게 사용하기 위한 dependency
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'mysql:mysql-connector-java:8.0.32'
-	runtimeOnly 'mysql:mysql-connector-java'
-
 	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 
+	// mysql 사용을 위한 dependency
+	implementation 'mysql:mysql-connector-java:8.0.32'
+	runtimeOnly 'mysql:mysql-connector-java'
+
 	//security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -66,13 +71,13 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 
 	implementation 'org.json:json:20230227'
-
 }
 
 

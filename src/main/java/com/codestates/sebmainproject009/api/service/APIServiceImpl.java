@@ -1,9 +1,13 @@
 package com.codestates.sebmainproject009.api.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.net.URLEncoder;
 
 
@@ -38,4 +42,13 @@ public class APIServiceImpl implements APIService {
 
         return urlBuilder.toString();
     }
+
+
+    public ResponseEntity<String> getResponse(URL requestURL) throws URISyntaxException {
+        RestTemplate restTemplate = new RestTemplate();
+
+        return restTemplate.getForEntity(requestURL.toURI(), String.class);
+    }
+
+
 }

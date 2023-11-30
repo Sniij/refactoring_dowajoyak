@@ -1,4 +1,4 @@
-package com.codestates.sebmainproject009.search.entity;
+package com.codestates.sebmainproject009.search.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -82,6 +82,8 @@ public class ItemList {
                 ;
 
     }
+
+
 
 }
 

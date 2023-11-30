@@ -8,8 +8,6 @@ import com.codestates.sebmainproject009.commu.entity.Commu;
 import com.codestates.sebmainproject009.commu.service.CommuService;
 import com.codestates.sebmainproject009.user.entity.User;
 import com.codestates.sebmainproject009.user.service.UserService;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +16,6 @@ import java.util.Optional;
 
 
 @Service
-@Getter
-@Setter
 public class CommentService {
 
     private final CommentRepository commentRepository;

@@ -5,18 +5,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.net.URISyntaxException;
-import java.net.URL;
 
 @Service
 public class JSONService {
 
-    public JSONObject getJsonBodyByRequestURL(URL requestURL) throws URISyntaxException {
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(requestURL.toURI(), String.class);
+    public JSONObject getJsonBody(ResponseEntity<String> responseEntity){
 
         String responseBody = responseEntity.getBody();
 
@@ -25,7 +18,8 @@ public class JSONService {
         return jsonObject.getJSONObject("body");
     }
 
-    public JSONArray getJsonArrayByJsonBody(JSONObject jsonBody) {
+
+    public JSONArray getJsonArray(JSONObject jsonBody) {
 
         JSONArray jsonArray;
 
@@ -36,4 +30,6 @@ public class JSONService {
         }
         return jsonArray;
     }
+
+
 }
