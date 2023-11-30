@@ -31,8 +31,7 @@ public class SearchService {
 
     private final UserService userService;
 
-    public SearchService(String serviceKey, JSONService jsonService, APIServiceImpl apiServiceImpl, JwtTokenizer jwtTokenizer, UserService userService) {
-        this.serviceKey = serviceKey;
+    public SearchService(JSONService jsonService, APIServiceImpl apiServiceImpl, JwtTokenizer jwtTokenizer, UserService userService) {
         this.jsonService = jsonService;
         this.apiServiceImpl = apiServiceImpl;
         this.jwtTokenizer = jwtTokenizer;
