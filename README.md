@@ -1,5 +1,7 @@
 ## Dowajoyak 의 리팩토링 버전입니다.
-### 오리지널 : https://github.com/codestates-seb/seb43_main_009
+#### 오리지널 : https://github.com/codestates-seb/seb43_main_009
+
+---
 
 ### Commu API
 - 기존 인증 로직없이 진행되던 API 에서 JWT Token 을 이용한 인증과정 추가
