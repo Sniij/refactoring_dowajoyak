@@ -31,9 +31,10 @@ public class CommuController {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity postCommu(@RequestBody CommuPostDto commuPostDto) {
+    public ResponseEntity postCommu(@RequestBody CommuPostDto commuPostDto,
+                                    @RequestHeader("Authorization") String authorizationHeader) {
 
-        Commu commu = commuService.createCommu(commuPostDto);
+        Commu commu = commuService.createCommu(commuPostDto, authorizationHeader);
 
         URI uri = UriComponentsBuilder.newInstance()
                 .path("/commu/"+commu.getCommuId())
@@ -51,7 +52,8 @@ public class CommuController {
         Page<Commu> commuPage = commuService.findCommus(page - 1, size);
         List<Commu> commuList = commuPage.getContent();
 
-        MultiResponseDto<List<CommuResponsesDto>> multiResponseDto = new MultiResponseDto<>(mapper.commuListToCommuResponsesDtoList(commuList), commuPage);
+        MultiResponseDto<List<CommuResponsesDto>> multiResponseDto =
+                new MultiResponseDto<>(mapper.commuListToCommuResponsesDtoList(commuList), commuPage);
 
         return new ResponseEntity<>(multiResponseDto, HttpStatus.OK);
 

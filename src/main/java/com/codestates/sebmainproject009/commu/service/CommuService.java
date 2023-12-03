@@ -41,15 +41,15 @@ public class CommuService {
     }
 
 
-    public Commu createCommu(CommuPostDto commuPostDto){
+    public Commu createCommu(CommuPostDto commuPostDto, String token){
 
-        User user = userService.findVerifiedUser(commuPostDto.getUserId());
+        User user;
+        user = userService.findUserByToken(token);
         Commu commu = mapper.commuPostDtoToCommu(commuPostDto);
         commu.setUser(user);
 
         return commuRepository.save(commu);
     }
-
     public Commu updateCommu(CommuPatchDto dto, String token){
 
         Commu findCommu = getCommu(dto.getCommuId(), token);
@@ -93,10 +93,6 @@ public class CommuService {
         return commuRepository.findAll(PageRequest.of(page, size, Sort.by("commuId").descending()));
     }
 
-    public List<Commu> findCommuList(){
-        return commuRepository.findAll();
-    }
-
 
     public void deleteCommu(long commuId, String token){
 
@@ -117,15 +113,4 @@ public class CommuService {
     }
 
 
-    public Commu createCommuCustom(String title, String content, String imageUrl,Long userId) {
-
-        User user = userService.findVerifiedUser(userId);
-        Commu commu =new Commu();
-        commu.setTitle(title);
-        commu.setContent(content);
-        commu.setUser(user);
-        commu.setImageUrl(imageUrl);
-
-        return commuRepository.save(commu);
-    }
 }

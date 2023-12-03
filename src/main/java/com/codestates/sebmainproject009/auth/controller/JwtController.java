@@ -34,7 +34,6 @@ public class JwtController {
 
         String accessToken = jwtTokenizer.refreshAccessToken(authorizationHeader, user);
 
-
         return new ResponseEntity<>(accessToken, HttpStatus.CREATED);
     }
 }
