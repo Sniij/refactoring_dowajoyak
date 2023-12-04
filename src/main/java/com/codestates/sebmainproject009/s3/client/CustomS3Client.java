@@ -23,49 +23,21 @@ public class CustomS3Client {
     String region = "ap-northeast-2";
     String bucketName = "dowajoyak.image";
 
-    private final GenerateName generateName;
 
-    public CustomS3Client(GenerateName generateName) {
-        this.generateName = generateName;
-    }
-
-
-    public String uploadImageToS3(MultipartFile image) {
-        // AWS 계정 정보 설정
-
-
-        // S3 클라이언트 생성
-        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+    public AmazonS3 getAmazonS3() {
+        return AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .build();
-
-        try {
-            // 업로드할 이미지 파일의 이름 생성
-            String fileName = null;
-            if (image.getOriginalFilename() != null) {
-                fileName = generateName.generateFileName(image.getOriginalFilename());
-            } else return null;
-
-            // 이미지 파일을 로컬에 저장
-            Path tempFile = Files.createTempFile(fileName, "");
-            image.transferTo(tempFile.toFile());
-
-            // S3에 이미지 업로드
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, fileName, tempFile.toFile());
-            s3Client.putObject(putObjectRequest);
-
-            // 업로드된 이미지의 URL 생성
-            String imageUrl = "https://s3." + region + ".amazonaws.com/" + bucketName + "/" + fileName;
-
-            return imageUrl;
-        } catch (Exception e) {
-            // 업로드 실패 처리
-            e.printStackTrace();
-            return null;
-        } finally {
-            // S3 클라이언트 종료
-            s3Client.shutdown();
-        }
     }
+
+    public String getRegion() {
+        return region;
+    }
+
+    public String getBucketName() {
+        return bucketName;
+    }
+
+
 }
